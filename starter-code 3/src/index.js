@@ -9,26 +9,28 @@ const Todo = ({ task, completed, onClick }) => {
     <li className={completed ? 'completed' : ''} onClick={onClick}>{task}</li>
   )
 }
+///i think i messed up with task form
+const TaskForm = ({ handleChange, newTask }) => {
+
+
+  return (
+    <form>
+
+    <input name="task"
+    placeholder="Task"
+    onChange={handleChange}
+    value={newTask}
+    />
+
+    <button>Add</button>
+
+    </form>
+  );
+}
 
 class App extends React.Component {
 
 
-  /// keeps submititng the form and it doesnt invoke iother functions
-  handleSubmit = (e) => {
-    console.log('works');
-    e.preventDefault(); // prevent the form from refreshing the page
-
-    this.setState(prevState => {
-
-      const newTodo = { task: prevState.newTask, completed: false };
-      const todos = prevState.todos.concat(newTodo);
-
-      return {
-        todos,
-        newTask: ''
-      };
-    });
-  }
 
   remainingTodos() {
     return this.state.todos.filter(todo => !todo.completed);
@@ -36,9 +38,17 @@ class App extends React.Component {
 
 
   state = {
-    todos: [{ task: 'Make a todo app', completed: 'false'}, {task: 'Scream', completed: 'false'}, {task: 'Shout', completed: 'false'}, {task: 'And code', completed: 'false'}]
+    todos: [{ task: 'Make a todo app', completed: false}, {task: 'Scream', completed: false}, {task: 'Shout', completed: false}, {task: 'And code', completed: false}],
+     newTask: ''
 
   }
+
+
+  handleChange = (e) => {
+    console.log(e.target.value);
+    this.setState({ newTask: e.target.value });
+  }
+
   // `index` is the index of the todo clicked on
   // We are using it to determine which todo we want to toggle
   tooggleCompleted = (index) => {
@@ -57,12 +67,22 @@ class App extends React.Component {
       return { todos };
     });
   }
+  /// keeps submititng the form and it doesnt invoke iother functions
+  handleSubmit = (e) => {
+    console.log('works');
+    e.preventDefault(); // prevent the form from refreshing the page
 
-  handleChange = (e) => {
-    console.log(e.target.value);
-    this.setState({ newTask: e.target.value });
+    this.setState(prevState => {
+
+      const newTodo = { task: prevState.newTask, completed: false };
+      const todos = prevState.todos.concat(newTodo);
+
+      return {
+        todos,
+        newTask: ''
+      };
+    });
   }
-
 
 
   render() {
@@ -81,27 +101,6 @@ class App extends React.Component {
   }
 }
 
-const TaskForm = ({ handleChange, newTask }) => {
-
-
-
-
-
-
-  return (
-    <form>
-
-    <input name="task"
-    placeholder="Task"
-    onChange={handleChange}
-    value={newTask}
-    />
-
-    <button>Add</button>
-
-    </form>
-  );
-}
 ReactDOM.render(
   <App />,
   document.getElementById('root')
