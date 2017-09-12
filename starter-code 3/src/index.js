@@ -10,19 +10,17 @@ const Todo = ({ task, completed, onClick }) => {
   )
 }
 ///i think i messed up with task form
-const TaskForm = ({ handleChange, newTask }) => {
-
-
+const TaskForm = ({ handleChange, handleSubmit, newTask }) => {
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
 
-    <input name="task"
-    placeholder="Task"
-    onChange={handleChange}
-    value={newTask}
-    />
+      <input name="task"
+        placeholder="Task"
+        onChange={handleChange}
+        value={newTask}
+      />
 
-    <button>Add</button>
+      <button>Add</button>
 
     </form>
   );
@@ -69,17 +67,20 @@ class App extends React.Component {
   }
   /// keeps submititng the form and it doesnt invoke iother functions
   handleSubmit = (e) => {
-    console.log('works');
+    console.log('HANDLE');
     e.preventDefault(); // prevent the form from refreshing the page
 
     this.setState(prevState => {
-
-      const newTodo = { task: prevState.newTask, completed: false };
+      // we cannot modify the todos array directly using `push`
+      // we have to make sure we make a new copy of the array
+      // `concat` behaves the same as `push` but returns a new array
+      const newTodo = { task: prevState.newTask };
       const todos = prevState.todos.concat(newTodo);
 
+      // we return the new state from `setState`
       return {
-        todos,
-        newTask: ''
+        todos: todos,
+        newTask: '' // this will clear the form input
       };
     });
   }
@@ -94,6 +95,7 @@ class App extends React.Component {
       </ul>
 
       <TaskForm handleChange={this.handleChange}
+      handleSubmit={this.handleSubmit}
       newTask={this.state.newTask}
       />
       </main>
